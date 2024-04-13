@@ -14,9 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => 200,
             'data' => Category::paginate(10)
-
         ]);
     }
 
@@ -26,10 +24,9 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         return response()->json([
-            'status' => 201,
             'message' => 'Created succesfuly!',
             'item' => Category::create($request->validated())
-        ]);
+        ], 201);
     }
 
     /**
@@ -38,7 +35,6 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         return response()->json([
-            'status' => 200,
             'item' => $category
         ]);
     }
@@ -49,7 +45,6 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Updated succesfuly!',
             'item' => $category->update($request->validated())
         ]);
@@ -61,7 +56,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Deleted succesfuly!',
             'item' => $category->delete()
         ]);

@@ -14,9 +14,7 @@ class SaleLineController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => 200,
             'data' => SaleLine::paginate(10)
-
         ]);
     }
 
@@ -26,10 +24,9 @@ class SaleLineController extends Controller
     public function store(StoreSaleLineRequest $request)
     {
         return response()->json([
-            'status' => 201,
             'message' => 'Created succesfuly!',
             'item' => SaleLine::create($request->validated())
-        ]);
+        ], 201);
     }
 
     /**
@@ -38,7 +35,6 @@ class SaleLineController extends Controller
     public function show(SaleLine $saleLine)
     {
         return response()->json([
-            'status' => 200,
             'item' => $saleLine
         ]);
     }
@@ -49,7 +45,6 @@ class SaleLineController extends Controller
     public function update(UpdateSaleLineRequest $request, SaleLine $saleLine)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Updated succesfuly!',
             'item' => $saleLine->update($request->validated())
         ]);
@@ -61,7 +56,6 @@ class SaleLineController extends Controller
     public function destroy(SaleLine $saleLine)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Deleted succesfuly!',
             'item' => $saleLine->delete()
         ]);

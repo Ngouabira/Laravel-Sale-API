@@ -14,9 +14,7 @@ class ProductController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => 200,
             'data' => Product::paginate(10)
-
         ]);
     }
 
@@ -26,10 +24,9 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         return response()->json([
-            'status' => 201,
             'message' => 'Created succesfuly!',
             'item' => Product::create($request->validated())
-        ]);
+        ], 201);
     }
 
     /**
@@ -38,7 +35,6 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return response()->json([
-            'status' => 200,
             'item' => $product
         ]);
     }
@@ -49,7 +45,6 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Updated succesfuly!',
             'item' => $product->update($request->validated())
         ]);
@@ -61,7 +56,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Deleted succesfuly!',
             'item' => $product->delete()
         ]);

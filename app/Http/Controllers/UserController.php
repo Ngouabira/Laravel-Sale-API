@@ -14,9 +14,7 @@ class UserController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => 200,
             'data' => User::paginate(10)
-
         ]);
     }
 
@@ -26,7 +24,6 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         return response()->json([
-            'status' => 201,
             'message' => 'Created succesfuly!',
             'item' => User::create($request->validated())
         ], 201);
@@ -38,7 +35,6 @@ class UserController extends Controller
     public function show(User $user)
     {
         return response()->json([
-            'status' => 200,
             'item' => $user
         ]);
     }
@@ -49,7 +45,6 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Updated succesfuly!',
             'item' => $user->update($request->validated())
         ]);
@@ -61,7 +56,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         return response()->json([
-            'status' => 200,
             'message' => 'Deleted succesfuly!',
             'item' => $user->delete()
         ]);
