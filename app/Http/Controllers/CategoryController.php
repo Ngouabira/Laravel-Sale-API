@@ -23,6 +23,10 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        if (!$request->validated()) {
+            return response()->json($request->validator->errors(), 422);
+        }
+
         return response()->json([
             'message' => 'Created succesfuly!',
             'item' => Category::create($request->validated())
