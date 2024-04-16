@@ -41,7 +41,7 @@ class StoreCategoryRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         $errors = $validator->errors();
-
+        return $errors;
         throw new HttpResponseException(response()->json([
             'errors' => $errors,
         ], 422));
