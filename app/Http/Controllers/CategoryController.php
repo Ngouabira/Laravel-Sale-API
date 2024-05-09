@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
+
         return response()->json([
-            'data' => Category::paginate(10)
+            new CategoryCollection(Category::where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->paginate(10))
         ]);
     }
 

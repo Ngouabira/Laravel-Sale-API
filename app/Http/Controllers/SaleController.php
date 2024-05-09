@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use App\Http\Resources\SaleCollection;
 use App\Models\SaleLine;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class SaleController extends Controller
@@ -13,10 +15,12 @@ class SaleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
+
         return response()->json([
-            'data' => Sale::paginate(10)
+            new SaleCollection(Sale::where("code", "like", "%" . $param . "%")->paginate(10))
         ]);
     }
 

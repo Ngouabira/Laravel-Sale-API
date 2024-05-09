@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductCollection;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
+
         return response()->json([
-            'data' => Product::paginate(10)
+            new ProductCollection(Product::with('category')->where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->orWhere("price", "like", "%" . $param . "%")->paginate(10))
         ]);
     }
 
