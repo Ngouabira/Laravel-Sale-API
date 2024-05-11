@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
         return response()->json([
-            'data' => User::paginate(10)
+             new UserCollection(User::where("name", "like", "%" . $param . "%")->orWhere("email", "like", "%" . $param . "%")->orWhere("role", "like", "%" . $param . "%")->paginate(10))
         ]);
     }
 
@@ -35,7 +39,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         return response()->json([
-            'item' => $user
+            'item' => new UserResource($user)
         ]);
     }
 
