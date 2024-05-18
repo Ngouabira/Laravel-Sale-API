@@ -17,9 +17,10 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
+        $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
         return response()->json([
-            new CategoryCollection(Category::where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->paginate(10))
+            new CategoryCollection(Category::where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->paginate($size))
         ]);
     }
 

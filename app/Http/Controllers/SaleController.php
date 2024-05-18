@@ -18,9 +18,10 @@ class SaleController extends Controller
     public function index(Request $request)
     {
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
+        $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
         return response()->json([
-            new SaleCollection(Sale::where("code", "like", "%" . $param . "%")->paginate(10))
+            new SaleCollection(Sale::where("code", "like", "%" . $param . "%")->paginate($size))
         ]);
     }
 
