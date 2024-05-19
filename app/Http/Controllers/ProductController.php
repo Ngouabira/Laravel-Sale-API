@@ -17,9 +17,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
+        $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
         return response()->json([
-            new ProductCollection(Product::with('category')->where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->orWhere("price", "like", "%" . $param . "%")->paginate(10))
+            new ProductCollection(Product::with('category')->where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->orWhere("price", "like", "%" . $param . "%")->paginate($size))
         ]);
     }
 
