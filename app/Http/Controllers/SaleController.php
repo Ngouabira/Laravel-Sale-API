@@ -6,6 +6,7 @@ use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Http\Resources\SaleCollection;
+use App\Http\Resources\SaleResource;
 use App\Models\SaleLine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,9 +21,9 @@ class SaleController extends Controller
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
         $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
-        return response()->json([
+        return response()->json(
             new SaleCollection(Sale::where("code", "like", "%" . $param . "%")->paginate($size))
-        ]);
+        );
     }
 
     /**
@@ -42,7 +43,7 @@ class SaleController extends Controller
             }
 
             return response()->json([
-                'item' => $sale
+                'data' => new SaleResource($sale)
             ], 201);
         }
 
@@ -57,7 +58,7 @@ class SaleController extends Controller
     public function show(Sale $sale)
     {
         return response()->json([
-            'item' => $sale
+            'data' => new SaleResource($sale)
         ]);
     }
 
@@ -68,7 +69,7 @@ class SaleController extends Controller
     {
         return response()->json([
             'message' => 'Updated succesfuly!',
-            'item' => $sale->update($request->validated())
+            'data' => new SaleResource($sale->update($request->validated()))
         ]);
     }
 
@@ -77,9 +78,16 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale)
     {
+        if($sale->delete()){
+
+            return response()->json([
+                'message' => 'Deleted succesfuly!',
+                
+            ]);
+        }
         return response()->json([
-            'message' => 'Deleted succesfuly!',
-            'item' => $sale->delete()
+            'message' => 'Somethings does wrong!',
+            
         ]);
     }
 }
