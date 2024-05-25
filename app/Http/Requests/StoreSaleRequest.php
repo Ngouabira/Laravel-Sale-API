@@ -24,7 +24,8 @@ class StoreSaleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'code' => 'required|string|unique:sales',
+            'discount' => 'nullable|numeric',
         ];
     }
 

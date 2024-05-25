@@ -17,9 +17,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
-        return response()->json([
-             new UserCollection(User::where("name", "like", "%" . $param . "%")->orWhere("email", "like", "%" . $param . "%")->orWhere("role", "like", "%" . $param . "%")->paginate(10))
-        ]);
+        $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
+        return response()->json(
+             new UserCollection(User::where("name", "like", "%" . $param . "%")->orWhere("email", "like", "%" . $param . "%")->orWhere("role", "like", "%" . $param . "%")->paginate($size))
+        );
     }
 
     /**
@@ -29,7 +30,7 @@ class UserController extends Controller
     {
         return response()->json([
             'message' => 'Created succesfuly!',
-            'item' => User::create($request->validated())
+            'data' => new UserResource(User::create($request->validated()))
         ], 201);
     }
 
@@ -39,7 +40,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         return response()->json([
-            'item' => new UserResource($user)
+            'data' => new UserResource($user)
         ]);
     }
 
@@ -50,7 +51,7 @@ class UserController extends Controller
     {
         return response()->json([
             'message' => 'Updated succesfuly!',
-            'item' => $user->update($request->validated())
+            'data' => new UserResource($user->update($request->validated()))
         ]);
     }
 
@@ -59,9 +60,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if($user->delete()){
+            return response()->json([
+                'message' => 'Deleted succesfuly!',
+               
+            ]);
+        }
         return response()->json([
-            'message' => 'Deleted succesfuly!',
-            'item' => $user->delete()
+            'message' => 'Error!'
+           
         ]);
+
     }
 }

@@ -19,9 +19,9 @@ class ProductController extends Controller
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
         $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
-        return response()->json([
+        return response()->json(
             new ProductCollection(Product::with('category')->where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->orWhere("price", "like", "%" . $param . "%")->paginate($size))
-        ]);
+        );
     }
 
     /**
@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'message' => 'Created succesfuly!',
-            'item' => Product::create($request->validated())
+            'data' => new ProductResource(Product::create($request->validated()))
         ], 201);
     }
 
@@ -41,7 +41,7 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return response()->json([
-            'item' => new ProductResource($product)
+            'data' => new ProductResource($product)
         ]);
     }
 
@@ -52,7 +52,7 @@ class ProductController extends Controller
     {
         return response()->json([
             'message' => 'Updated succesfuly!',
-            'item' => $product->update($request->validated())
+            'data' => new ProductResource($product->update($request->validated()))
         ]);
     }
 
@@ -61,9 +61,16 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if($product->delete()){
+
+            return response()->json([
+                'message' => 'Deleted succesfuly!',
+                 
+            ]);
+        }
         return response()->json([
-            'message' => 'Deleted succesfuly!',
-            'item' => $product->delete()
+            'message' => 'somethinhs does wrong!',
+             
         ]);
     }
 }

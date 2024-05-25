@@ -19,12 +19,10 @@ class CategoryController extends Controller
         $param = isset($request->query()['param']) ?  $request->query()['param'] : "";
         $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
-        return response()->json([
-            new CategoryCollection(Category::where("name", "like", "%" . $param . "%")
-                ->orWhere("description", "like", "%" . $param . "%")
-                // ->orderBy('id', 'desc')
-                ->paginate($size))
-        ]);
+        return response()->json(
+          new CategoryCollection(Category::where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->paginate($size))
+
+        );
     }
 
     /**
@@ -38,7 +36,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'Created succesfuly!',
-            'item' => Category::create($request->validated())
+            'data' => new CategoryResource(Category::create($request->validated()))
         ], 201);
     }
 
@@ -48,7 +46,7 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         return response()->json([
-            'item' => $category
+            'data' => new CategoryResource($category)
         ]);
     }
 
@@ -59,7 +57,7 @@ class CategoryController extends Controller
     {
         return response()->json([
             'message' => 'Updated succesfuly!',
-            'item' => $category->update($request->validated())
+            'data' => new CategoryResource($category->update($request->validated()))
         ]);
     }
 
@@ -68,9 +66,16 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if($category->delete()){
+
+            return response()->json([
+                'message' => 'Deleted succesfuly!',
+
+            ]);
+        }
         return response()->json([
-            'message' => 'Deleted succesfuly!',
-            'item' => $category->delete()
+            'message' => 'Somethings does wrong!',
+
         ]);
     }
 }
