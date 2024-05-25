@@ -20,7 +20,10 @@ class CategoryController extends Controller
         $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
         return response()->json([
-            new CategoryCollection(Category::where("name", "like", "%" . $param . "%")->orWhere("description", "like", "%" . $param . "%")->paginate($size))
+            new CategoryCollection(Category::where("name", "like", "%" . $param . "%")
+                ->orWhere("description", "like", "%" . $param . "%")
+                // ->orderBy('id', 'desc')
+                ->paginate($size))
         ]);
     }
 

@@ -21,7 +21,9 @@ class SaleController extends Controller
         $size = isset($request->query()['size']) ?  $request->query()['size'] : 5;
 
         return response()->json([
-            new SaleCollection(Sale::where("code", "like", "%" . $param . "%")->paginate($size))
+            new SaleCollection(Sale::where("code", "like", "%" . $param . "%")
+                ->orderBy('id', 'desc')
+                ->paginate($size))
         ]);
     }
 
